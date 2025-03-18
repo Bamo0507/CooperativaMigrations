@@ -11,11 +11,24 @@ CREATE TABLE pagos (
   forma_pago_id INT NOT NULL REFERENCES formas_pago(id_forma),
   monto_total NUMERIC(10,2) NOT NULL DEFAULT 0,
   fecha_pago DATE NOT NULL DEFAULT CURRENT_DATE,
-  num_boleta INT
+  num_boleta INT NULL
 );
 
--- Ya no se utiliza
+-- Como se hico un drop table a pagos, conectamos otra vez comprobante_pago
+ALTER TABLE comprobantes_pago 
+ADD CONSTRAINT fk_comprobante_pago 
+FOREIGN KEY (pago_id) 
+REFERENCES pagos(id_pago);
+
+-- Hizo falta tener esta llave foranea
+ALTER TABLE prestamo_codeudores
+ADD CONSTRAINT fk_prestamo_codeudores_prestamo
+FOREIGN KEY (usuario_id)
+REFERENCES usuarios(id_usuario);
+
+-- Ya no se utilizan
 DROP TABLE IF EXISTS tipos_pago CASCADE;
+DROP TABLE IF EXISTS detalles_pago CASCADE;
 
 CREATE TABLE cuotas (
   id_cuota SERIAL PRIMARY KEY NOT NULL,
